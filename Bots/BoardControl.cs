@@ -13,7 +13,7 @@ namespace HREngine.Bots
    {
       public BoardControl()
       {
-        HRLog.Write("BoardControl custom class initialized.");
+         HRLog.Write("BoardControl custom class initialized.");
       }
 
       protected override HREntity GetNextAttackToAttack()
@@ -38,6 +38,6 @@ namespace HREngine.Bots
          }
 
          return enemyState.Player.GetHero();
-      }    
+      }
    }
 }

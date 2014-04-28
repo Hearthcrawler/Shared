@@ -36,7 +36,14 @@ namespace HREngine.Basics
          if (HRBattle.IsInTargetMode())
          {
             HRLog.Write("Targeting...");
-            return new TargetAction(PlayCardAction.LastTarget != null ? PlayCardAction.LastTarget : GetNextAttackToAttack());
+            HREntity TargetEntity = PlayCardAction.LastTarget;
+            if (TargetEntity == null)
+            {
+               HRCardManager.GetTargetForCard(PlayCardAction.LastPlayedCard);
+               if (TargetEntity == null)
+                  TargetEntity = GetNextAttackToAttack();
+            }
+            return new TargetAction(TargetEntity);
          }
 
          var localPlayerState = new PlayerState(HRPlayer.GetLocalPlayer());
@@ -198,7 +205,10 @@ namespace HREngine.Basics
                #endregion
 
                if (item.GetEntity().GetCost() <= HRPlayer.GetLocalPlayer().GetNumAvailableResources())
-                  return new PlayCardAction(item);
+               {
+                  if (HRBattle.CanUseCard(item.GetEntity()) && HRCardManager.IsCardAllowedByRule(item))
+                     return new PlayCardAction(item);
+               }
             }
 
             #region The Coin Feature
